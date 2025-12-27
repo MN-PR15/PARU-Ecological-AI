@@ -1,0 +1,13 @@
+streamlit
+pandas
+numpy
+joblib
+pydeck
+folium
+streamlit-folium
+scipy
+shap
+groq
+duckduckgo-search
+scikit-learn
+plotly

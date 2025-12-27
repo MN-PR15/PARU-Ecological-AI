@@ -1,0 +1,14 @@
+# Ignore all virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env
+
+# Ignore python cache (very heavy)
+__pycache__/
+*.pyc
+
+# Ignore Streamlit secrets
+.streamlit/secrets.toml
+
