@@ -173,12 +173,23 @@ if 'swarm_results' not in st.session_state:
     st.session_state.swarm_results = None
 
 # --- SIMULATION & RENDERING ---
+# --- SIMULATION & RENDERING ---
 def run_simulation(district_name, rain_mod, temp_mod):
     d = st.session_state.df_history[st.session_state.df_history['district'] == district_name].sort_values('date').copy()
     latest = d.iloc[-1]
     
     future_date = latest['date'] + pd.Timedelta(days=16)
-    new_rain = latest['Rain_Sum'] * (1 + rain_mod/100)
+    
+    # 1. LOGIC FIX: Handle Zero Rain Case
+    base_rain = latest['Rain_Sum']
+    if base_rain < 5 and rain_mod > 0:
+        # If it's dry, treat the slider as "Add mm" instead of "%"
+        # e.g. 50% slider = Add 20mm of unseasonal rain
+        new_rain = base_rain + (rain_mod * 0.5) 
+    else:
+        # Otherwise standard percentage scaling
+        new_rain = base_rain * (1 + rain_mod/100)
+        
     new_temp = latest['Air_Temp'] + temp_mod
     
     future_row = {
@@ -192,8 +203,27 @@ def run_simulation(district_name, rain_mod, temp_mod):
     
     extended_df = pd.concat([d, pd.DataFrame([future_row])], ignore_index=True)
     science_df = add_scientific_features(extended_df)
+    
+    # 2. FORCE IMPACT ON TRENDS (The "Why it wasn't moving" fix)
+    # We must update the derived 3-month averages, otherwise the model ignores the single day change
+    if rain_mod != 0:
+        col_idx = science_df.columns.get_loc('Rain_3mo_Avg')
+        current_avg = science_df.iloc[-1, col_idx]
+        
+        if current_avg < 5 and rain_mod > 0:
+             science_df.iloc[-1, col_idx] += (rain_mod * 0.5) # Force trend up
+        else:
+             science_df.iloc[-1, col_idx] *= (1 + rain_mod/100) # Scale trend
+
+    # 3. FORCE IMPACT ON SOIL (Correlated variable)
+    if 'Soil_Moisture' in science_df.columns and rain_mod != 0:
+         s_idx = science_df.columns.get_loc('Soil_Moisture')
+         # Rain usually boosts soil moisture, but dampened by 50% factor
+         science_df.iloc[-1, s_idx] *= (1 + (rain_mod/100 * 0.5))
+
     target_row = science_df.iloc[[-1]][features].fillna(0)
     prediction = model.predict(target_row)[0]
+    
     return prediction, science_df.iloc[[-1]]
 
 def render_map_layer(dataframe, target_col):
