@@ -3,19 +3,17 @@ from groq import Groq
 import streamlit as st
 
 # --- CONFIGURATION ---
-# Primary: High Intelligence (Best for detailed reports)
+# Primary: High Intelligence
 PRIMARY_MODEL = "llama-3.3-70b-versatile"
 
-# Fallback: High Speed/Efficiency (Best for avoiding limits)
-FALLBACK_MODEL = "llama3-8b-8192" 
+# Fallback: The NEW supported model
+FALLBACK_MODEL = "llama-3.1-8b-instant" 
 
 # --- AUTHENTICATION ---
 try:
-    # Option 1: Cloud Secrets
     api_key = st.secrets["GROQ_API_KEY"]
 except:
     try:
-        # Option 2: Local Env
         api_key = os.environ.get("GROQ_API_KEY")
     except:
         api_key = None
@@ -27,16 +25,11 @@ else:
     client = None
 
 def query_llm(prompt):
-    """
-    Robust Query Function with Fallback Logic.
-    1. Tries PRIMARY_MODEL (70b).
-    2. If it fails (Rate Limit/Error), switches to FALLBACK_MODEL (8b).
-    """
     if not client:
-        return "⚠️ AI Error: Groq API Key not found."
+        return "⚠️ AI Error: Groq API Key not found. Add GROQ_API_KEY to Streamlit Secrets."
 
-    # --- ATTEMPT 1: PRIMARY MODEL ---
     try:
+        # Attempt 1: Primary Model
         chat_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model=PRIMARY_MODEL,
@@ -45,24 +38,19 @@ def query_llm(prompt):
         return chat_completion.choices[0].message.content
 
     except Exception as e_primary:
-        # --- ATTEMPT 2: FALLBACK MODEL ---
-        # Check if error is related to Rate Limit (429) or other API issues
+        # Attempt 2: Fallback Model
         error_msg = str(e_primary).lower()
         
-        if "429" in error_msg or "rate limit" in error_msg:
+        # Catch Rate Limits (429) OR Decommissioned errors
+        if "429" in error_msg or "rate limit" in error_msg or "error" in error_msg:
             try:
-                # Retry with smaller model
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
                     model=FALLBACK_MODEL,
                     temperature=0.3,
                 )
-                # Success! Return result but maybe log that we used fallback (optional)
-                return f"{chat_completion.choices[0].message.content}\n\n*(Generated via Backup Model due to high traffic)*"
-            
+                return f"{chat_completion.choices[0].message.content}\n\n*(Backup Model used)*"
             except Exception as e_fallback:
-                return f"⚠️ System Overload: Both primary and backup AI models are currently busy. Please try again in 60 seconds.\nError: {str(e_fallback)}"
-        
+                return f"⚠️ System Busy: {str(e_fallback)}"
         else:
-            # If it's not a rate limit (e.g., connection error), return the error
             return f"⚠️ AI Error: {str(e_primary)}"
