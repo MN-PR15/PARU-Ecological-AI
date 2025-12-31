@@ -19,7 +19,13 @@ from update_utils import execute_pipeline
 PAGE_CONFIG = {
     "page_title": "PARU: Ecological Surveillance",
     "layout": "wide",
-    "page_icon": "🏔️"
+    "page_icon": "🏔️",
+    "initial_sidebar_state": "expanded",
+    "menu_items": {
+        'Get Help': 'https://github.com/MN-PR15/PARU-Ecological-AI',
+        'Report a bug': "https://github.com/MN-PR15/PARU-Ecological-AI/issues",
+        'About': "## PARU Ecological AI\n**Created by [Mohit nautiyal]**\n© 2025 All Rights Reserved."
+    }
 }
 DATA_PATH = 'Uttarakhand_Forest_Data_Corrected (2).csv'
 MODEL_PATH = 'Ultra_Forest_Model.joblib'
@@ -447,7 +453,7 @@ with tab2:
                     go.Bar(name='Current (B)', x=['NDVI', 'NDMI'], y=[row_b['NDVI_Smooth'], row_b.get('NDMI',0)], marker_color='#e74c3c')
                 ])
                 fig.update_layout(barmode='group', template="plotly_dark", height=300, margin=dict(l=0, r=0, t=0, b=0))
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
             
             # --- MAP & REPORT FOR COMPARISON MODE ---
             st.write("---")
@@ -606,7 +612,18 @@ with tab4:
                               fillcolor="red", opacity=0.2, line_width=0, annotation_text="Current Event", annotation_position="top left")
                 
                 fig.update_layout(template="plotly_dark", height=400)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
         else:
             st.success("✅ No structural loss signatures detected in the recent window.")
+# --- FOOTER ---
+st.markdown("---")
+st.markdown(
+    """
+    <div style='text-align: center; color: #666;'>
+        Built with ❤️ by <a href='https://linkedin.com/in/mohit-nautiyal-569b183a1' target='_blank'>[Mohit Nautiyal]</a> | 
+        © 2025 PARU Project
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
