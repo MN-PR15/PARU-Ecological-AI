@@ -83,25 +83,26 @@ PARU implements a custom forensic algorithm that scans for the **"Deforestation 
 **📂 Directory Structure**
     ```bash
 
-PARU-Ecological-AI/
-├── app.py                            # 🚀 Main Application (Streamlit UI & Maps)
-├── core_logic.py                     # 🧠 Scientific Feature Engine & Triad Logic
-├── llm_engine.py                     # 🤖 Groq AI Handler (with Llama-3 Fallback)
-├── update_utils.py                   # 🔄 Pipeline Execution & Retraining Utilities
-├── knowledge.py                      # 📚 Domain Knowledge Base & System Prompts
-├── benchmark.py                      # 📉 Model Performance Evaluation Script
-├── data_checker.py                   # 🛡️ Data Quality & Integrity Validation
-├── requirements.txt                  # 📦 Python Dependencies
-├── Ultra_Forest_Model.joblib         # 🔮 Pre-trained HistGradientBoosting Model
-├── uttarakhand.geojson               # 🗺️ Geospatial Polygon Data for 3D Maps
-└── Uttarakhand_Forest_Data_Corrected (2).csv  # 📊 25-Year Curated Climate Dataset
+      PARU-Ecological-AI/
+      ├── app.py                            # 🚀 Main Application (Streamlit UI & Maps)
+      ├── core_logic.py                     # 🧠 Scientific Feature Engine & Triad Logic
+      ├── llm_engine.py                     # 🤖 Groq AI Handler (with Llama-3 Fallback)
+      ├── update_utils.py                   # 🔄 Pipeline Execution & Retraining Utilities
+      ├── knowledge.py                      # 📚 Domain Knowledge Base & System Prompts
+      ├── benchmark.py                      # 📉 Model Performance Evaluation Script
+      ├── data_checker.py                   # 🛡️ Data Quality & Integrity Validation
+      ├── requirements.txt                  # 📦 Python Dependencies
+      ├── Ultra_Forest_Model.joblib         # 🔮 Pre-trained HistGradientBoosting Model
+      ├── uttarakhand.geojson               # 🗺️ Geospatial Polygon Data for 3D Maps
+      └── Uttarakhand_Forest_Data_Corrected (2).csv  # 📊 25-Year Curated Climate Dataset
 
 **🔮 Future Roadmap**
+
 [ ] Computer Vision: Integrate Satellite Imagery (Sentinel-2) for real-time visual validation.
 
 [ ] Edge Deployment: Optimization for running on low-resource IoT devices in remote forest offices.
 
 [ ] SMS Alerts: Integration with Twilio to send SMS alerts to rangers when the "Triad" is detected.
 
-👨‍💻 Author
-[Mohit Nautiyal] B.Tech Computer Science Engineering
+**👨‍💻 Author**
+Mohit Nautiyal B.Tech Computer Science Engineering
