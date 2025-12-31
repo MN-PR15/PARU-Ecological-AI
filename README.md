@@ -64,7 +64,7 @@ PARU implements a custom forensic algorithm that scans for the **"Deforestation 
 
 1. **Clone the Repository**
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/PARU-Ecological-AI.git](https://github.com/YOUR_USERNAME/PARU-Ecological-AI.git)
+   git clone [https://github.com/MN-PR15/PARU-Ecological-AI.git](https://github.com/MN-PR15/PARU-Ecological-AI.git)
    cd PARU-Ecological-AI
 2. **Install Dependencies**
     ```bash
