@@ -272,4 +272,6 @@ def execute_pipeline():
         except Exception as e:
             return False, f"{msg} | ❌ Training Failed: {str(e)}"
             
-    return status, msg
+    return status, msggit add "Uttarakhand_Forest_Data_Corrected (2).csv"
+if __name__ == "__main__":
+    execute_pipeline()
